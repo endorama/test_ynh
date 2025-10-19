@@ -1,0 +1,17 @@
+#!/bin/bash
+
+source _common.sh
+source /usr/share/yunohost/helpers
+
+ynh_script_progression --message="Stopping and removing systemd service..."
+ynh_remove_systemd_config
+
+ynh_script_progression --message="Removing logging files and logrotate config..."
+rm -r /var/log/$app
+ynh_remove_logrotate
+
+ynh_script_progression --message="Removing nginx configuration..."
+ynh_remove_nginx_config
+
+ynh_script_progression --message="Removal of $app completed" --last
+

@@ -1,0 +1,49 @@
+#!/bin/bash
+
+source _common.sh
+source /usr/share/yunohost/helpers
+
+ynh_script_progression --message="Storing installation settings..."
+password_salt=$(generate_salt)
+ynh_app_setting_set --app=$app --key=password_salt --value=$password_salt
+ynh_app_setting_set_default --app=$app --key=disable_registration --value="false"
+port=$(ynh_app_setting_get --app=$app --key=port)
+ynh_app_setting_set_default --app=$app --key=address --value="127.0.0.1:$port"
+
+ynh_script_progression --message="Installing Kakeibo..."
+binary_file="$install_dir/kakeibo"
+cp ../kakeibo "$binary_file"
+chmod +x "$binary_file"
+if [ ! -x "$binary_file" ]; then
+    ynh_die "Failed to install binary"
+fi
+
+config_file="$install_dir/config.yaml"
+ynh_add_config --template="../conf/config.yaml" --destination="$config_file"
+if [ ! -f "$config_file" ]; then
+    ynh_die "Failed to install config"
+fi
+
+ynh_script_progression --message="Ensure permissions for install directory..."
+chown -R $app:$app "$install_dir"
+
+ynh_script_progression --message="Ensure permissions for data directory..."
+chown -R $app:$app "$data_dir"
+chmod 750 "$data_dir"
+
+ynh_script_progression --message="Configuring systemd service..."
+ynh_add_systemd_config
+
+ynh_script_progression --message="Setting up logging..."
+mkdir -p /var/log/$app
+chown -R $app:$app /var/log/$app
+chmod 750 /var/log/$app
+ynh_use_logrotate
+
+ynh_script_progression --message="Configuring nginx..."
+ynh_add_nginx_config
+
+ynh_script_progression --message="Starting Kakeibo..."
+ynh_systemd_action --service_name=$app --action="start" --line_match="Starting server on"
+
+ynh_script_progression --message="Installation of $app completed" --last

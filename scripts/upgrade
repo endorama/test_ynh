@@ -1,0 +1,56 @@
+#!/bin/bash
+
+# Upgrade script for Kakeibo Yunohost app
+
+source _common.sh
+source /usr/share/yunohost/helpers
+
+app="kakeibo"
+ynh_print_info --message="Upgrading $app..."
+ynh_print_info --message="Stopping $app service..."
+ynh_systemd_action --service_name=$app --action="stop" --line_match="Server stopped gracefully"
+
+ynh_print_info --message="Upgrading main binary..."
+install_dir=$(ynh_app_setting_get --app=$app --key=install_dir)
+# Fix permissions first to avoid an exploitable loophole if the file
+# is already controlled by an attacker. cp does not preserve permissions.
+chown -R $app:$app "$install_dir/kakeibo"
+cp ../conf/kakeibo-binary "$install_dir/kakeibo"
+if [ ! -x "$install_dir/kakeibo" ]; then
+    ynh_die "Failed to install binary"
+fi
+chmod +x "$install_dir/kakeibo"
+ynh_script_progression --message="Binary upgraded successfully"
+
+ynh_print_info --message="Upgrading config file..."
+install_dir=$(ynh_app_setting_get --app=$app --key=install_dir)
+config_file="$install_dir/config.yaml"
+chown -R $app:$app "$config_file"
+domain=$(ynh_app_setting_get --app=$app --key=domain)
+path=$(ynh_app_setting_get --app=$app --key=path)
+port=$(ynh_app_setting_get --app=$app --key=port)
+address=":$port"
+data_dir=$(ynh_app_setting_get --app=$app --key=data_dir)
+password_salt=$(ynh_app_setting_get --app=$app --key=password_salt)
+disable_registration=$(ynh_app_setting_get --app=$app --key=disable_registration)
+ynh_add_config --template="../conf/config.yaml" --destination="$config_file"
+if [ ! -f "$config_file" ]; then
+    ynh_die "Failed to upgrade config"
+fi
+ynh_script_progression --message="Config upgraded successfully"
+
+ynh_print_info --message="Upgrading systemd service file..."
+ynh_add_systemd_config
+systemctl daemon-reload
+
+ynh_print_info --message="Upgrading nginx configuration..."
+path=$(ynh_app_setting_get --app=$app --key=path)
+port=$(ynh_app_setting_get --app=$app --key=port)
+ynh_add_nginx_config
+ynh_print_info --message="Reloading nginx..."
+ynh_systemd_action --service_name=nginx --action=reload
+
+ynh_print_info --message="Restarting $app service..."
+ynh_systemd_action --service_name=$app --action="restart" --line_match="Starting server on"
+
+ynh_print_info --message="Upgrade finished!"

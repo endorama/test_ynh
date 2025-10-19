@@ -1,0 +1,15 @@
+version = 1.0
+
+[main]
+name.en = "Main configuration"
+help = ""
+services = ["__APP__"]
+
+[main.main.no_registration]
+ask.en = "Disable user registration"
+help.en = "When selected disables the ability to sign up from the login screen."
+type = "boolean"
+default = 1
+yes = true
+no = false
+bind = ":__INSTALL_DIR__/config.yaml"

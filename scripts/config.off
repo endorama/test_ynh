@@ -1,0 +1,12 @@
+#!/bin/bash
+#
+# https://doc.yunohost.org/it/packaging/advanced/config_panels/#custom-getterssettersvalidators-aka-bindnull
+
+source /usr/share/yunohost/helpers
+
+ynh_abort_if_errors
+
+# Put your getter, setter, validator or action here
+
+# Keep this last line
+ynh_app_config_run $1

@@ -1,0 +1,96 @@
+# Kakeibo Configuration Example.
+# Copy this file to config.yaml and customize the values for your environment.
+# You can override any of these settings using environment variables with the KAKEIBO_ prefix.
+# NOTE: environment variables overrides values in config file.
+
+# Server configuration
+server:
+  # Server address (e.g., ":3000", "localhost:8080")
+  # Override with environment variable: KAKEIBO_SERVER_ADDRESS
+  address: "__ADDRESS__"
+  # Enable prefork mode for better performance
+  # Override with environment variable: KAKEIBO_SERVER_PREFORK
+  prefork: false
+  # Request read timeout in seconds
+  # Override with environment variable: KAKEIBO_SERVER_READ_TIMEOUT
+  read_timeout: 30
+  # Response write timeout in seconds
+  # Override with environment variable: KAKEIBO_SERVER_WRITE_TIMEOUT
+  write_timeout: 30
+  # Graceful shutdown timeout in seconds
+  # Override with environment variable: KAKEIBO_SERVER_GRACEFUL_SHUTDOWN_TIMEOUT
+  graceful_shutdown_timeout: 30
+# Database configuration
+database:
+  # Main SQLite database file path
+  # Override with environment variable: KAKEIBO_DATABASE_PATH
+  path: "__DATA_DIR__/app.db"
+  # Maximum number of database connections
+  # Override with environment variable: KAKEIBO_DATABASE_MAX_CONNS
+  max_conns: 100
+  # Maximum number of idle connections
+  # Override with environment variable: KAKEIBO_DATABASE_IDLE_CONNS
+  idle_conns: 10
+# Sessions configuration
+sessions:
+  # SQLite sessions store file path
+  # Override with environment variable: KAKEIBO_SESSIONS_PATH
+  path: "__DATA_DIR__/sessions.db"
+# Email configuration
+email:
+  # SMTP server hostname
+  # Override with environment variable: KAKEIBO_EMAIL_HOST
+  host: "localhost"
+  # SMTP server port
+  # Override with environment variable: KAKEIBO_EMAIL_PORT
+  port: 25
+  # SMTP username
+  # Override with environment variable: KAKEIBO_EMAIL_USERNAME
+  username: ""
+  # SMTP password
+  # Override with environment variable: KAKEIBO_EMAIL_PASSWORD
+  password: ""
+  # From email address for outgoing emails
+  # Override with environment variable: KAKEIBO_EMAIL_EMAIL_FROM
+  email_from: "__APP__@__DOMAIN__"
+# Application configuration
+app:
+  # Application name
+  # Override with environment variable: KAKEIBO_APP_NAME
+  name: "Kakeibo"
+  # Application URL (used for email links, etc.)
+  # Override with environment variable: KAKEIBO_APP_URL
+  url: "https://__DOMAIN____PATH__"
+  # Disable user registration
+  # Override with environment variable: KAKEIBO_APP_NO_REGISTRATION
+  no_registration: __DISABLE_REGISTRATION__
+  # Enable debug mode (shows detailed error pages)
+  # Override with environment variable: KAKEIBO_APP_DEBUG
+  debug: false
+  # Password hashing salt (minimum 8 characters)
+  # Override with environment variable: KAKEIBO_APP_PASSWORD_SALT
+  password_salt: "__PASSWORD_SALT__"
+  # Print all routes on startup
+  # Override with environment variable: KAKEIBO_APP_PRINT_ROUTES
+  print_routes: false
+# OIDC (OpenID Connect) configuration
+oidc:
+  # Enable OIDC authentication
+  # Override with environment variable: KAKEIBO_OIDC_ENABLED
+  enabled: false
+  # OIDC provider URL (e.g., "https://accounts.google.com")
+  # Override with environment variable: KAKEIBO_OIDC_PROVIDER_URL
+  provider_url: ""
+  # OIDC client ID
+  # Override with environment variable: KAKEIBO_OIDC_CLIENT_ID
+  client_id: ""
+  # OIDC client secret
+  # Override with environment variable: KAKEIBO_OIDC_CLIENT_SECRET
+  client_secret: ""
+  # OIDC redirect URL (app.url + "/auth/oidc/callback")
+  # Override with environment variable: KAKEIBO_OIDC_REDIRECT_URL
+  # TODO: set this from code as we own the controller route.
+  redirect_url: ""
+  # OIDC scopes (comma-separated)
+  # Override with environment variable: KAKEIBO_OIDC_SCOPES
+  scopes: "openid,profile,email"
