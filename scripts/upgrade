@@ -29,7 +29,7 @@ chown -R $app:$app "$config_file"
 domain=$(ynh_app_setting_get --app=$app --key=domain)
 path=$(ynh_app_setting_get --app=$app --key=path)
 port=$(ynh_app_setting_get --app=$app --key=port)
-address=":$port"
+address="127.0.0.1:$port"
 data_dir=$(ynh_app_setting_get --app=$app --key=data_dir)
 password_salt=$(ynh_app_setting_get --app=$app --key=password_salt)
 disable_registration=$(ynh_app_setting_get --app=$app --key=disable_registration)
