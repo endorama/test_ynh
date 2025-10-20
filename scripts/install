@@ -3,12 +3,20 @@
 source _common.sh
 source /usr/share/yunohost/helpers
 
+#=================================================
+# SETTINGS
+#=================================================
+
 ynh_script_progression --message="Storing installation settings..."
 password_salt=$(generate_salt)
 ynh_app_setting_set --app=$app --key=password_salt --value=$password_salt
 ynh_app_setting_set_default --app=$app --key=disable_registration --value="false"
 port=$(ynh_app_setting_get --app=$app --key=port)
 ynh_app_setting_set_default --app=$app --key=address --value="127.0.0.1:$port"
+
+#=================================================
+# BINARY INSTALLATION AND CONFIGURATION
+#=================================================
 
 ynh_script_progression --message="Installing Kakeibo..."
 binary_file="$install_dir/kakeibo"
@@ -31,6 +39,10 @@ ynh_script_progression --message="Ensure permissions for data directory..."
 chown -R $app:$app "$data_dir"
 chmod 750 "$data_dir"
 
+#=================================================
+# SYSTEM CONFIGURATION AND SERVICE MANAGEMENT
+#=================================================
+
 ynh_script_progression --message="Configuring systemd service..."
 ynh_add_systemd_config
 
@@ -43,7 +55,15 @@ ynh_use_logrotate
 ynh_script_progression --message="Configuring nginx..."
 ynh_add_nginx_config
 
+#=================================================
+# START SYSTEMD SERVICE
+#=================================================
+
 ynh_script_progression --message="Starting Kakeibo..."
 ynh_systemd_action --service_name=$app --action="start" --line_match="Starting server on"
+
+#=================================================
+# END OF SCRIPT
+#=================================================
 
 ynh_script_progression --message="Installation of $app completed" --last

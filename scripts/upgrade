@@ -7,8 +7,17 @@ source /usr/share/yunohost/helpers
 
 app="kakeibo"
 ynh_print_info --message="Upgrading $app..."
+
+#=================================================
+# STOPPING SERVICE
+#=================================================
+
 ynh_print_info --message="Stopping $app service..."
 ynh_systemd_action --service_name=$app --action="stop" --line_match="Server stopped gracefully"
+
+#=================================================
+# UPGRADING BINARY
+#=================================================
 
 ynh_print_info --message="Upgrading main binary..."
 install_dir=$(ynh_app_setting_get --app=$app --key=install_dir)
@@ -21,6 +30,10 @@ if [ ! -x "$install_dir/kakeibo" ]; then
 fi
 chmod +x "$install_dir/kakeibo"
 ynh_script_progression --message="Binary upgraded successfully"
+
+#=================================================
+# UPGRADING CONFIGURATION
+#=================================================
 
 ynh_print_info --message="Upgrading config file..."
 install_dir=$(ynh_app_setting_get --app=$app --key=install_dir)
@@ -39,9 +52,17 @@ if [ ! -f "$config_file" ]; then
 fi
 ynh_script_progression --message="Config upgraded successfully"
 
+#=================================================
+# UPGRADING SYSTEMD SERVICE
+#=================================================
+
 ynh_print_info --message="Upgrading systemd service file..."
 ynh_add_systemd_config
 systemctl daemon-reload
+
+#=================================================
+# UPGRADING NGINX CONFIGURATION
+#=================================================
 
 ynh_print_info --message="Upgrading nginx configuration..."
 path=$(ynh_app_setting_get --app=$app --key=path)
@@ -50,7 +71,15 @@ ynh_add_nginx_config
 ynh_print_info --message="Reloading nginx..."
 ynh_systemd_action --service_name=nginx --action=reload
 
+#=================================================
+# RESTARTING SERVICE
+#=================================================
+
 ynh_print_info --message="Restarting $app service..."
 ynh_systemd_action --service_name=$app --action="restart" --line_match="Starting server on"
+
+#=================================================
+# END OF SCRIPT
+#=================================================
 
 ynh_print_info --message="Upgrade finished!"

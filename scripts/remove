@@ -3,15 +3,37 @@
 source _common.sh
 source /usr/share/yunohost/helpers
 
+#=================================================
+# STOPPING AND REMOVING SERVICE
+#=================================================
+
 ynh_script_progression --message="Stopping and removing systemd service..."
 ynh_remove_systemd_config
+
+#=================================================
+# REMOVING NGINX CONFIGURATION
+#=================================================
+
+ynh_script_progression --message="Removing nginx configuration..."
+ynh_remove_nginx_config
+
+#=================================================
+# REMOVING APPLICATION FILES
+#=================================================
+
+ynh_script_progression --message="Removing app files..."
+rm -r /var/www/$app
+
+ynh_script_progression --message="Removing app database and storage..."
+rm -r /var/run/$app
 
 ynh_script_progression --message="Removing logging files and logrotate config..."
 rm -r /var/log/$app
 ynh_remove_logrotate
 
-ynh_script_progression --message="Removing nginx configuration..."
-ynh_remove_nginx_config
+#=================================================
+# END OF SCRIPT
+#=================================================
 
 ynh_script_progression --message="Removal of $app completed" --last
 
