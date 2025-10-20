@@ -24,9 +24,7 @@ ynh_backup --src_path="/etc/nginx/conf.d/$domain.d/$app.conf"
 #=================================================
 
 ynh_print_info --message="Backing up data directory..."
-# Info: /var/run/kakeibo will not be saved, because 'BACKUP_CORE_ONLY' is set.
-# FIXME: Make sure this folder is backed up.
-ynh_backup --src_path="$data_dir" --is_big
+ynh_backup --src_path="$data_dir"
 
 #=================================================
 # BACKING UP INSTALL DIRECTORY
