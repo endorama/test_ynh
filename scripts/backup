@@ -5,16 +5,32 @@
 source ../settings/scripts/_common.sh
 source /usr/share/yunohost/helpers
 
+#=================================================
+# BACKING UP SYSTEMD SERVICE
+#=================================================
+
 ynh_print_info --message="Backing up systemd service..."
 ynh_backup --src_path="/etc/systemd/system/$app.service"
 
+#=================================================
+# BACKING UP NGINX CONFIGURATION
+#=================================================
+
 ynh_print_info --message="Backing up nginx configuration..."
 ynh_backup --src_path="/etc/nginx/conf.d/$domain.d/$app.conf"
+
+#=================================================
+# BACKING UP DATA DIRECTORY
+#=================================================
 
 ynh_print_info --message="Backing up data directory..."
 # Info: /var/run/kakeibo will not be saved, because 'BACKUP_CORE_ONLY' is set.
 # FIXME: Make sure this folder is backed up.
 ynh_backup --src_path="$data_dir" --is_big
+
+#=================================================
+# BACKING UP INSTALL DIRECTORY
+#=================================================
 
 ynh_print_info --message="Backing up install directory..."
 ynh_backup --src_path="$install_dir"
