@@ -40,6 +40,8 @@ chown -R $app:$app /var/log/$app
 chmod 750 /var/log/$app
 ynh_use_logrotate
 
+yunohost service add "$app" --description="Kakeibo Family Financial App" --log="/var/log/$app/$app.log"
+
 ynh_script_progression --message="Configuring nginx..."
 ynh_add_nginx_config
 
