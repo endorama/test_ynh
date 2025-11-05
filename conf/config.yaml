@@ -1,8 +1,3 @@
-# Kakeibo Configuration Example.
-# Copy this file to config.yaml and customize the values for your environment.
-# You can override any of these settings using environment variables with the KAKEIBO_ prefix.
-# NOTE: environment variables overrides values in config file.
-
 # Server configuration
 server:
   # Server address (e.g., ":3000", "localhost:8080")
