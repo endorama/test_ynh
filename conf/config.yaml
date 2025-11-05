@@ -20,6 +20,14 @@ server:
   # Graceful shutdown timeout in seconds
   # Override with environment variable: KAKEIBO_SERVER_GRACEFUL_SHUTDOWN_TIMEOUT
   graceful_shutdown_timeout: 30
+  # Enable reverse proxy support (read real client IP from X-Forwarded-For header)
+  # Override with environment variable: KAKEIBO_SERVER_BEHIND_REVERSE_PROXY
+  behind_reverse_proxy: true
+  # List of trusted proxy IPs/CIDR ranges (defaults to localhost IPv4 and IPv6)
+  # Override with environment variable: KAKEIBO_SERVER_TRUSTED_PROXIES
+  # Example: ["127.0.0.1", "::1", "10.0.0.0/8"]
+  trusted_proxies:
+    - 127.0.0.1
 # Database configuration
 database:
   # Main SQLite database file path
