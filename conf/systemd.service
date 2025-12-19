@@ -18,13 +18,6 @@ StandardError=inherit
 
 ReadWritePaths=__DATA_DIR__ /var/log/__APP__
 
-# Additional hardening; this will prevent usage of default
-# Yunohost app folder (in /home/yunohost.app/). This app will
-# use /var/run/__APP__ instead. Deviating from Yunohost practice
-# is considered a better choice here to prevent any undue action
-# on home folders, not necessary for this app.
-ProtectHome=true
-
 # Sandboxing options to harden security
 # Details for these options: https://www.freedesktop.org/software/systemd/man/systemd.exec.html
 NoNewPrivileges=yes

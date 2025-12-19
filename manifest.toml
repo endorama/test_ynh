@@ -45,8 +45,6 @@ ram.runtime = "50M"
     [resources.install_dir]
 
     [resources.data_dir]
-    # This allows using ProtectHome=true in systemd unit.
-    dir = "/var/run/__APP__"
 
     [resources.permissions]
     main.url = "/"
