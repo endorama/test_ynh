@@ -53,6 +53,18 @@ fi
 ynh_script_progression --message="Config upgraded successfully"
 
 #=================================================
+# RUNNING APP MIGRATIONS
+#=================================================
+
+ynh_script_progression --message="Upgrading database..."
+pushd $install_dir
+vold=$(./kakeibo --config ./config.yaml migrate version)
+./kakeibo --config ./config.yaml migrate up
+vnew=$(./kakeibo --config ./config.yaml migrate version)
+popd
+ynh_script_progression --message="Upgraded db from v$vold to v$vnew"
+
+#=================================================
 # UPGRADING SYSTEMD SERVICE
 #=================================================
 
