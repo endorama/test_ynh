@@ -13,6 +13,7 @@ ynh_script_progression --message="Restoring data directory..."
 ynh_restore_file --origin_path="$data_dir"
 chown -R $app:$app "$data_dir"
 chmod 750 "$data_dir"
+chmod 640 "$data_dir/*"
 
 #=================================================
 # RESTORING INSTALL DIRECTORY

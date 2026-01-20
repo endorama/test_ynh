@@ -31,6 +31,10 @@ fi
 chmod +x "$install_dir/kakeibo"
 ynh_script_progression --message="Binary upgraded successfully"
 
+ynh_script_progression --message="Ensuring correct permissions on data dir"
+chown -R $app:$app "$data_dir"
+chmod 640 "$data_dir/*"
+
 #=================================================
 # UPGRADING CONFIGURATION
 #=================================================
